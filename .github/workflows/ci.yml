@@ -1,0 +1,41 @@
+---
+name: CI
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Use Node.js LTS
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+      - name: Restore cached dependencies (JS)
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: node-modules-${{ hashFiles('package.json') }}
+      - name: Restore cached dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo
+          key: cargo-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run Tests
+        run: pnpm run ci
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/coverage-final.json
+          token: ${{ secrets.CODECOV_TOKEN }}
