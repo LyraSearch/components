@@ -4,7 +4,14 @@ import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 function exec(command, args) {
-  return spawnSync(command, args, { stdio: "inherit" });
+  const result = spawnSync(command, args, { stdio: "inherit" });
+
+  if (result.error) {
+    throw result.error;
+  }
+  if (result.status !== 0) {
+    process.exit(typeof result.status);
+  }
 }
 
 try {
@@ -24,7 +31,7 @@ try {
 
     const wasmFile = resolve(rootDir, "../target", wasmTarget, "release", `${crate.replaceAll("-", "_")}.wasm`);
     console.log("\x1b[33m--- Optimizing Wasm artifact ---\x1b[0m");
-    await exec("wasm-opt", [wasmFile, "-o", wasmFile, "-O2", "--precompute"]);
+    exec("wasm-opt", [wasmFile, "-o", wasmFile, "-O2", "--precompute"]);
   }
 
   for (const target of targets) {
@@ -37,19 +44,19 @@ try {
     for (const crate of crates) {
       const wasmFile = resolve(rootDir, "../target", wasmTarget, "release", `${crate.replaceAll("-", "_")}.wasm`);
 
-      if (process.env.OPTIMIZE) {
+      if (process.env.OPTIMIZE === "true") {
         const watFile = resolve(outDir, `${crate}.wat`);
         const optimizedWat = resolve(outDir, `${crate}_optimized.wat`);
 
         console.log("    Generating textual version of the original Wasm artifact...");
-        await exec("wasm-opt", [wasmFile, "-o", watFile, "-O0", "--emit-text"]);
+        exec("wasm-opt", [wasmFile, "-o", watFile, "-O0", "--emit-text"]);
 
         console.log("    Generating textual version of the optimized Wasm artifact...");
-        await exec("wasm-opt", [wasmFile, "-o", optimizedWat, "-O0", "--emit-text"]);
+        exec("wasm-opt", [wasmFile, "-o", optimizedWat, "-O0", "--emit-text"]);
       }
 
       console.log("    Generating Javascript file ...");
-      await exec("wasm-bindgen", ["--target", target, "--out-dir", outDir, wasmFile]);
+      exec("wasm-bindgen", ["--target", target, "--out-dir", outDir, wasmFile]);
     }
   }
 

@@ -37,7 +37,6 @@
     "test": "c8 -c tests/config/c8-local.json tap --rcfile=tests/config/tap.yml tests/*.test.ts",
     "test:ci": "c8 -c tests/config/c8-ci.json tap --rcfile=tests/config/tap.yml --no-color tests/*.test.ts",
     "ci": "npm run build && npm run test:ci",
-    "prepare": "husky install && npm run build",
     "commit": "pnpm lint-staged && cz"
   },
   "author": {
