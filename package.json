@@ -9,6 +9,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./stemmer/*": {
+      "types": "./dist/stemmer/*.d.ts",
+      "import": "./dist/stemmer/*.js"
+    },
     "./wasm": {
       "types": "./dist/wasm.d.ts",
       "require": "./dist/wasm.js"

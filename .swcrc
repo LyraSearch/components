@@ -10,6 +10,10 @@
         "syntax": "typescript",
         "tsx": false,
         "dynamicImport": true
+      },
+      "baseUrl": ".",
+      "paths": {
+        "@stemmer/*": ["./src/stemmer/*"]
       }
     },
     "sourceMaps": true

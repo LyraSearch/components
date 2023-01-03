@@ -5,6 +5,10 @@ import * as ERRORS from "./errors.js";
 import type { Language } from "./languages.js";
 import { availableStopWords, stopWords } from "./stop-words/index.js";
 
+export * from "./diacritics.js";
+export * from "./errors.js";
+export * from "./languages.js";
+
 export type Stemmer = (word: string) => string;
 
 export type TokenizerConfig = {
