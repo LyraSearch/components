@@ -1,7 +1,7 @@
 {
   "check-coverage": true,
   "reporter": ["text", "json"],
-  "exclude": ["stemmer", "tests"],
+  "exclude": ["dist", "stemmer", "tests"],
   "branches": 80,
   "functions": 80,
   "lines": 80,

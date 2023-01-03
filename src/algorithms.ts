@@ -23,9 +23,12 @@ export function intersectTokenScores({ data: arrays }: { data: TokenScore[][] })
   for (let i = 1; i < arrLength; i++) {
     let found = 0;
     for (const elem of arrays[i]) {
-      const [count, score] = set.get(elem[0] ?? "") ?? [0, 0];
+      /* c8 ignore next */
+      const key = elem[0] ?? "";
+
+      const [count, score] = set.get(key) ?? [0, 0];
       if (count === i) {
-        set.set(elem[0] ?? "", [count + 1, score + elem[1]]);
+        set.set(key, [count + 1, score + elem[1]]);
         found++;
       }
     }

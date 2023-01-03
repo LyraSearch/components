@@ -1,4 +1,5 @@
 import { spawnSync } from "child_process";
+import { rename } from "fs/promises";
 import { mkdir } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -57,6 +58,11 @@ try {
 
       console.log("    Generating Javascript file ...");
       exec("wasm-bindgen", ["--target", target, "--out-dir", outDir, wasmFile]);
+
+      if (target === "nodejs") {
+        const wasmLoader = resolve(artifactsDir, target, `${crate.replaceAll("-", "_")}.js`);
+        await rename(wasmLoader, wasmLoader.replace(".js", ".cjs"));
+      }
     }
   }
 
