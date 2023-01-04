@@ -1,7 +1,11 @@
 import { createRequire } from "module";
-import type { IIntersectTokenScores, TokenScore } from "./types.js";
+import { INVALID_RUNTIME } from "./errors.js";
 
-type Runtime = "deno" | "node" | "browser" | "unknown";
+export type Runtime = "deno" | "node" | "browser" | "unknown";
+
+type TokenScore = [string, number];
+
+type IIntersectTokenScores = (options: { data: TokenScore[][] }) => { data: TokenScore[] };
 
 function getCurrentRuntime(): Runtime {
   /* c8 ignore next 11 */
@@ -21,12 +25,15 @@ function getCurrentRuntime(): Runtime {
 const currentRuntime = getCurrentRuntime();
 let _intersectTokenScores: IIntersectTokenScores;
 
-export async function intersectTokenScores(arrays: TokenScore[][]): Promise<TokenScore[]> {
+export async function intersectTokenScores(
+  arrays: TokenScore[][],
+  runtime: Runtime = currentRuntime,
+): Promise<TokenScore[]> {
   if (!_intersectTokenScores) {
     let runtimeWasm: { intersectTokenScores: IIntersectTokenScores };
 
     /* c8 ignore next 21 */
-    switch (currentRuntime) {
+    switch (runtime) {
       case "node": {
         const require = createRequire(import.meta.url);
         runtimeWasm = require("../dist/wasm/nodejs/lyra_utils_wasm.cjs");
@@ -43,7 +50,7 @@ export async function intersectTokenScores(arrays: TokenScore[][]): Promise<Toke
         break;
       }
       default: {
-        runtimeWasm = await import("./algorithms.js");
+        throw new Error(INVALID_RUNTIME(currentRuntime));
       }
     }
 

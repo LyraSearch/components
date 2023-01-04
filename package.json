@@ -9,10 +9,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./stemmer/*": {
-      "types": "./dist/stemmer/*.d.ts",
-      "import": "./dist/stemmer/*.js"
-    },
     "./wasm": {
       "types": "./dist/wasm.d.ts",
       "require": "./dist/wasm.js"
@@ -30,12 +26,12 @@
     "url": "https://github.com/lyrasearch/components"
   },
   "scripts": {
-    "predev": "rm -rf dist && mkdir dist && cp -a stemmer/lib dist/stemmer",
+    "predev": "rm -rf dist && mkdir dist",
     "dev": "swc -s -w -d dist src",
     "prebuild": "npm run lint",
     "build": "swc --delete-dir-on-start -d dist src",
     "build:wasm": "node ./rust/scripts/wasm.mjs",
-    "postbuild": "npm run build:wasm && tsc -p . --emitDeclarationOnly && cp -a stemmer/lib dist/stemmer",
+    "postbuild": "npm run build:wasm && tsc -p . --emitDeclarationOnly",
     "format": "prettier -w src rust/scripts",
     "lint": "eslint src rust/scripts --ext .ts,.mjs",
     "test": "c8 -c tests/config/c8-local.json tap --rcfile=tests/config/tap.yml tests/*.test.ts",
