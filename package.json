@@ -1,6 +1,6 @@
 {
   "name": "@lyrasearch/components",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "type": "module",
   "description": "Components for Lyra",
   "sideEffects": false,
