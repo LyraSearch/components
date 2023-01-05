@@ -36,4 +36,6 @@ jobs:
           version-prefix: ""
           build-command: |
             pnpm install --frozen-lockfile
-            pnpm build
+            rustup target add wasm32-unknown-unknown
+            cargo install wasm-bindgen-cli wasm-tools wasm-opt
+            pnpm run build
