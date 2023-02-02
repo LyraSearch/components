@@ -23,7 +23,7 @@ on:
       commit-message:
         description: "The commit message template"
         required: false
-        default: "Release {version}"
+        default: "chore: Release {version}"
       prerelease:
         description: "The prelease prefix"
         required: false
@@ -41,6 +41,7 @@ on:
 
 jobs:
   release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
