@@ -38,6 +38,7 @@ jobs:
         run: cargo install wasm-bindgen-cli wasm-tools wasm-opt
       - name: Install dependencies
         run: pnpm install
+      - name: Build
+        run: pnpm run build
       - name: Run Tests
-        run: |
-          pnpm run test
+        run: pnpm run ci
